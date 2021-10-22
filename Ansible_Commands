@@ -1,0 +1,33 @@
+# Добавление архива Ansible
+sudo apt-add-repository ppa:ansible/ansible
+
+# Установка Ansible из добавленного репозитария
+sudo apt install ansible -y
+
+# Проверка версии Ansible
+ansible --version
+
+# Проверяем доступные управляемые хосты (по умолчанию они указываются /etc/ansible/hosts)
+ansible all --list-hosts
+
+# Если хотим использовать хосты из другого файла, то указываем параметр -i
+ansible all --list-hosts -i ./ansible/hosts.ini
+
+
+# Первая команда на удаленном сервере, для авторизации вводим пароль
+ansible all -i hosts.ini -m ping --ask-pass
+# Может потребовать установить тулзу
+sudo apt install sshpass
+
+# Чтобы каждый раз не вводить пароль можно указать учетные данные в файле ~/ansible/hosts.ini
+192.168.50.5 ansible_user=vagrant ansible_password=vagrant
+
+# Повторяем команду, но уже без необходимости ввода пароля
+ansible all -i hosts.ini -m ping
+
+
+
+
+
+
+
