@@ -49,7 +49,7 @@ ansible -m ping web_servers_group -i ./inventory/inventory_hosts -m ping --ask-p
 # Может потребовать установить тулзу
 sudo apt install sshpass
 # Чтобы каждый раз не вводить пароль можно указать учетные данные в файле ./inventory/inventory_hosts
-192.168.50.5 ansible_user=vagrant ansible_password=vagrant
+192.168.0.1 ansible_user=ubuntu ansible_password=ubuntu
 # Повторяем команду, но уже без необходимости ввода пароля
 ansible all -i ./inventory/inventory_hosts -m ping
 

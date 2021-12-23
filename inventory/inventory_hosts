@@ -1,6 +1,6 @@
 [web_servers_group]
-nginx_server_1 ansible_host=3.121.235.128
-nginx_server_2 ansible_host=54.93.52.23
+nginx_server_1 ansible_host=192.168.0.1
+nginx_server_2 ansible_host=192.168.0.2
 
 
 [web_servers_group:vars]
