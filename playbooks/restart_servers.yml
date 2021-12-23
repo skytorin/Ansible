@@ -1,0 +1,16 @@
+---
+- name: Перезагрузка серверов
+  hosts: web_servers_group
+  #become_method: sudo
+  #become_user: ubuntu
+  become: yes
+
+  tasks:
+  - name: Перезагрузка хостов и ожидание их перезагрузки
+    reboot:
+      msg: "Reboot initiated by Ansible"
+      connect_timeout: 5
+      reboot_timeout: 600
+      pre_reboot_delay: 0
+      post_reboot_delay: 30
+      test_command: whoami

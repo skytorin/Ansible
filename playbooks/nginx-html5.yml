@@ -1,0 +1,19 @@
+---
+- name: Копирование каталогов Ansible в каталог узлов
+  hosts: web_servers_group
+  #become_method: sudo
+  #become_user: root
+  become: yes
+
+  tasks:
+# Копируйте дважды, так как иногда файлы пропускаются (в основном только один файл пропускается из папки, если папка не существует).
+  - name: Копирование из каталога в каталог
+    copy:
+      src: "../ansible-files/nginx/html5/zastavka/"
+      dest: "/var/www/html/"
+      owner: root
+      group: root
+      mode: 0644
+      backup: yes
+    ignore_errors: true
+...

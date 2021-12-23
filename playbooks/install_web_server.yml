@@ -1,0 +1,15 @@
+---
+- hosts: web_servers_group
+  become: yes
+ 
+  tasks:
+ 
+  - name: install nginx
+    apt: name=nginx update_cache=yes
+ 
+  - name: start nginx
+    service: name=nginx state=started
+ 
+  - name: restart nginx
+    service: name=nginx state=restarted
+...    

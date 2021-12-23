@@ -1,9 +1,18 @@
+-------------------
+Установка Ansible
+------------------
+#
 # Добавление архива Ansible
 sudo apt-add-repository ppa:ansible/ansible
 
 # Установка Ansible из добавленного репозитария
 sudo apt install ansible -y
 
+
+
+-------------------------
+### Команды Ansible
+-------------------------
 # Проверка версии Ansible
 ansible --version
 
@@ -11,21 +20,53 @@ ansible --version
 ansible all --list-hosts
 
 # Если хотим использовать хосты из другого файла, то указываем параметр -i
-ansible all --list-hosts -i ./ansible/hosts.ini
+ansible all --list-hosts -i ./inventory/inventory_hosts
 
 
-# Первая команда на удаленном сервере, для авторизации вводим пароль
-ansible all -i hosts.ini -m ping --ask-pass
+#####
+# Генерация ssh ключей для пользователя root
+mkdir ~/.ssh
+chown -R user:user ~/.ssh/
+chmod 700 ~/.ssh/
+ssh-keygen
+
+# Проброс root ssh ключей на узлы
+ansible all -m authorized_key -a "user=root key='{{ lookup('file', '/root/.ssh/id_rsa.pub') }}' path=/root/.ssh/authorized_keys manage_dir=no" --ask-pass -i ./inventory/inventory_hosts
+или
+cd .ssh
+ssh-copy-id -i id_rsa.pub user@host
+или
+ssh-copy-id '-p 2202 -i ~/.ssh/id_dsa  user@host'
+или
+cat ~/.ssh/id_rsa.pub | ssh user@host 'cat >> ~/.ssh/authorized_keys'
+#####
+
+# Первая команда на удаленном сервере по ключу
+ansible -m ping web_servers_group -i ./inventory/inventory_hosts
+
+# Команда на удаленном сервере по паролю
+ansible -m ping web_servers_group -i ./inventory/inventory_hosts -m ping --ask-pass
 # Может потребовать установить тулзу
 sudo apt install sshpass
-
-# Чтобы каждый раз не вводить пароль можно указать учетные данные в файле ~/ansible/hosts.ini
+# Чтобы каждый раз не вводить пароль можно указать учетные данные в файле ./inventory/inventory_hosts
 192.168.50.5 ansible_user=vagrant ansible_password=vagrant
-
 # Повторяем команду, но уже без необходимости ввода пароля
-ansible all -i hosts.ini -m ping
+ansible all -i ./inventory/inventory_hosts -m ping
 
+# Поверка времени, аптайма, загрузки хостов
+ansible -a uptime web_servers_group -i ./inventory/inventory_hosts
 
+# Выполнение произвольной команды в shell всех хостах
+ansible -m shell -a 'cat ~/.ssh/authorized_keys | grep rsa'  web_servers_group -i ./inventory/inventory_hosts
+
+# Проверка синтаксиса плейбука
+ansible-playbook ./playbooks/install_web_server.yml --syntax-check
+
+# Запуск плейбука на хостах указанных в файле
+ansible-playbook ./playbooks/install_web_server.yml -i ./inventory/inventory_hosts
+
+# Запуск плейбука с определенного шага на хостах указанных в файле
+ansible-playbook ./playbooks/install_web_server.yml -i ./inventory/inventory_hosts --step --start-at-task="start nginx"
 
 
 

@@ -1,0 +1,17 @@
+---
+- name: Установка полезных программ на всех узлах
+  hosts: web_servers_group
+  become: yes
+ 
+  tasks:
+  - name: Установить группу программ
+    apt:
+      name: "{{ package }}"
+    vars:
+      package:
+      - mc
+      - wget
+      - tar
+      - net-tools
+      state: latest
+
