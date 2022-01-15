@@ -39,7 +39,7 @@ ssh-copy-id '-p 2202 -i ~/.ssh/id_dsa  user@host'
 cat ~/.ssh/id_rsa.pub | ssh user@host 'cat >> ~/.ssh/authorized_keys'
 ```
 
-## 3. Комманды Ansible
+## 3. Команды Ansible
 ### Команды проверки
 Проверка версии Ansible
 ```bash
