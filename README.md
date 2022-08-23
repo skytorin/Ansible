@@ -38,6 +38,11 @@ ssh-copy-id '-p 2202 -i ~/.ssh/id_dsa  user@host'
 ```bash
 cat ~/.ssh/id_rsa.pub | ssh user@host 'cat >> ~/.ssh/authorized_keys'
 ```
+или
+```bash
+ cat ~/.ssh/id_rsa.pub | ssh {user_name}@{hostname_or_ip} 'mkdir -p .ssh;touch .ssh/authorized_keys; cat >> .ssh/authorized_keys;chmod 700 ~/.ssh;chmod 600 ~/.ssh/authorized_keys'
+```
+
 
 ## 3. Команды Ansible
 ### Команды проверки
